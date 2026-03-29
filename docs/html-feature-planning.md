@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document captures the planning and implementation shape of the HTML-focused feature set currently built in the app. It is meant to be a future reference for continuing the HTML learning experience without needing to re-read the full codebase first.
+This document captures the planning and implementation shape of the HTML-focused feature set currently built in the app. It is meant to be a future reference for continuing the HTML learning experience without needing to re-read the full codebase first. For **all modules** practice projects and file layout, see [practice-projects-overview](./practice-projects-overview.md).
 
 ## Current Goal
 
@@ -60,41 +60,67 @@ These are the important routes currently used:
   - main roadmap dashboard
 - `/modules/:slug`
   - module details page
-- `/modules/html/projects/:projectSlug`
-  - HTML project details page
+- `/modules/:moduleSlug/projects/:projectSlug`
+  - practice project details page (shared for every module, including HTML)
 
 ## Current Files
 
-### Core UI
+### App shell & routing
 
-- [src/App.tsx](/Users/narendrakajla77/Downloads/personal/dev/fullstack-journey/src/App.tsx)
-  - main routing
-  - dashboard
-  - module details page
-  - topics table with toggle
-  - HTML practice project cards
-  - HTML practice project details page
+- [`src/App.tsx`](../src/App.tsx) — routes, module state, `localStorage` sync, topic toggle handler
+- [`src/lib/journeyStorage.ts`](../src/lib/journeyStorage.ts) — `mergeStoredProgress`, storage key constant
+- [`src/main.tsx`](../src/main.tsx) — `BrowserRouter`
+- [`src/index.css`](../src/index.css) — Tailwind import
 
-- [src/main.tsx](/Users/narendrakajla77/Downloads/personal/dev/fullstack-journey/src/main.tsx)
-  - router setup with `BrowserRouter`
+### Shared pages & layout
 
-- [src/index.css](/Users/narendrakajla77/Downloads/personal/dev/fullstack-journey/src/index.css)
-  - Tailwind import
+- [`src/pages/DashboardPage.tsx`](../src/pages/DashboardPage.tsx) — roadmap dashboard
+- [`src/pages/ModuleDetailsPage.tsx`](../src/pages/ModuleDetailsPage.tsx) — any `/modules/:slug` (topics + [`ModulePracticeProjectsSection`](../src/features/practice-projects/ModulePracticeProjectsSection.tsx) when the module has projects)
+- [`src/layout/Shell.tsx`](../src/layout/Shell.tsx) — page chrome
+- [`src/components/`](../src/components/) — `MetricCard`, `ModuleCard`, `TopicsTable`, `NotFoundPage`, `InfoListCard`, `FeatureIcon`
+
+### Shared practice-project UI
+
+- [`src/features/practice-projects/ModulePracticeProjectsSection.tsx`](../src/features/practice-projects/ModulePracticeProjectsSection.tsx) — project grid for any module that has entries in the registry
+- [`src/features/practice-projects/ModulePracticeProjectCard.tsx`](../src/features/practice-projects/ModulePracticeProjectCard.tsx) — card linking to a project
+- [`src/features/practice-projects/PracticeProjectDetailsPage.tsx`](../src/features/practice-projects/PracticeProjectDetailsPage.tsx) — full project page + **View code** panel
+- [`src/features/practice-projects/modulePracticeUi.ts`](../src/features/practice-projects/modulePracticeUi.ts) — per-module accent colors
 
 ### Data Sources
 
-- [src/data/modules.ts](/Users/narendrakajla77/Downloads/personal/dev/fullstack-journey/src/data/modules.ts)
+- [`src/data/modules.ts`](../src/data/modules.ts)
   - roadmap module data
-  - HTML topics included here
+  - the HTML module is the entry with `slug: 'html'`; its topics live here
 
-- [src/data/htmlProjects.ts](/Users/narendrakajla77/Downloads/personal/dev/fullstack-journey/src/data/htmlProjects.ts)
-  - HTML practice project metadata
-  - project summaries
-  - setup steps
-  - requirements
-  - learning topics
-  - deliverables
-  - visual references
+- [`src/data/htmlProjects.ts`](../src/data/htmlProjects.ts) — HTML `PracticeProject[]` (`slug: 'html'` in [`practiceProjectsRegistry.ts`](../src/data/practiceProjectsRegistry.ts))
+- [`src/data/practiceProjectsRegistry.ts`](../src/data/practiceProjectsRegistry.ts) — maps every module slug to its project list
+- [`src/data/practiceProject.ts`](../src/data/practiceProject.ts) — shared `PracticeProject` type and `codeWalkthrough` shape
+
+## Where and how HTML module changes apply
+
+Most HTML-module work falls into **data** vs **UI** edits. There is no separate `.html` file per module: the app is React plus TypeScript data files; Vite serves the shell [`index.html`](../index.html) and mounts the app on `#root`.
+
+### Where to edit
+
+| What you want to change | Primary file |
+| ----------------------- | ------------ |
+| HTML topic titles, order, default completion, or module copy | [`src/data/modules.ts`](../src/data/modules.ts) (the `slug: 'html'` module) |
+| Practice projects: new project, steps, requirements, links | [`src/data/htmlProjects.ts`](../src/data/htmlProjects.ts) |
+| Practice project UI (all modules) | [`src/features/practice-projects/`](../src/features/practice-projects/) |
+| Shared module page / dashboard layout | [`src/pages/`](../src/pages/), [`src/components/`](../src/components/) |
+| Routes, progress state, `localStorage` | [`src/App.tsx`](../src/App.tsx), [`src/lib/journeyStorage.ts`](../src/lib/journeyStorage.ts) |
+
+Edits to the data files update the dashboard, the HTML module page, and project detail routes as soon as the dev server hot-reloads.
+
+### Topic completion vs topic definitions
+
+- **On load:** [`App.tsx`](../src/App.tsx) calls `mergeStoredProgress` from [`journeyStorage.ts`](../src/lib/journeyStorage.ts): the **topic list, order, and module copy** always come from [`modules.ts`](../src/data/modules.ts). Saved `done` values are restored when **`module.slug` + topic `label`** still exist in storage; **new topics** use defaults from `modules.ts`; **renamed** topics lose the old `done` (labels no longer match).
+- **On save:** the full in-memory `Module[]` is still written to `journey-modules-progress` after each change (same key as before).
+- You rarely need to clear `localStorage` for structural edits anymore; clear it if you change storage shape or want a full reset.
+
+### Practice projects
+
+Project copy and structure are **static data** until you implement extra progress features ([Progress Improvements](#progress-improvements)). Adding a project is usually: append an object in [`htmlProjects.ts`](../src/data/htmlProjects.ts), ensure `slug` is unique, and open it at `/modules/html/projects/:projectSlug` (same URL pattern as other modules; see [practice-projects-overview](./practice-projects-overview.md)).
 
 ## HTML Topics Currently Included
 
@@ -156,12 +182,13 @@ Topic completion is currently handled in app state and persisted to `localStorag
 
 - toggling a topic updates the details page immediately
 - dashboard stats also update immediately
-- state is saved using local storage key:
-  - `journey-modules-progress`
+- the full `Module[]` is written to `localStorage` under the key `journey-modules-progress` on each change
+- toggles identify rows by topic **`label`** (see `handleToggleTopic` in [`App.tsx`](../src/App.tsx))
+- **initial load** merges stored `done` via `mergeStoredProgress` in [`journeyStorage.ts`](../src/lib/journeyStorage.ts)
 
 ### Important Note
 
-Project data is static right now. Only topic completion state is interactive.
+Project data is static right now. Only module/topic state in the app is interactive. For how edits to topics and projects surface in the UI, see [Where and how HTML module changes apply](#where-and-how-html-module-changes-apply).
 
 ## Design Intent
 
@@ -217,29 +244,26 @@ These are the most natural follow-ups later:
 
 ### Architecture Improvements
 
-- move large route sections out of `App.tsx` into dedicated component files
-- consider separate feature folders:
-  - `src/features/modules`
-  - `src/features/html-projects`
-- centralize local storage helpers
+- further split [`src/pages/ModuleDetailsPage.tsx`](../src/pages/ModuleDetailsPage.tsx) if it grows (per-module tabs, etc.)
+- add `src/features/modules/` if shared module-only widgets multiply
+- optional: centralize topic-toggle logic in a small hook next to [`journeyStorage.ts`](../src/lib/journeyStorage.ts)
 
 ## Constraints To Remember
 
 - this is a frontend-only educational interface right now
 - project details are informational only
 - external visual references are linked from internet sources
-- current Vite build is blocked locally by Node version mismatch on this machine
-  - installed Node: `20.17.0`
-  - required by current Vite toolchain: `20.19+`
+- use a Node.js version that satisfies the toolchain (check `package.json` engines if present, CI config, and Vite’s current requirements) so `npm run dev` and `npm run build` work reliably
 
 ## Quick Resume Checklist
 
 If continuing this feature later, start with:
 
-1. Open [src/App.tsx](/Users/narendrakajla77/Downloads/personal/dev/fullstack-journey/src/App.tsx)
-2. Review [src/data/modules.ts](/Users/narendrakajla77/Downloads/personal/dev/fullstack-journey/src/data/modules.ts)
-3. Review [src/data/htmlProjects.ts](/Users/narendrakajla77/Downloads/personal/dev/fullstack-journey/src/data/htmlProjects.ts)
-4. Decide whether the next change is:
+1. Read [Where and how HTML module changes apply](#where-and-how-html-module-changes-apply) so the next edit goes in the right file.
+2. Open [`src/features/practice-projects/`](../src/features/practice-projects/) for shared project UI; [`src/App.tsx`](../src/App.tsx) for routes and state.
+3. Review [`src/data/modules.ts`](../src/data/modules.ts) for the HTML module’s topics.
+4. Review [`src/data/htmlProjects.ts`](../src/data/htmlProjects.ts) for practice projects.
+5. Decide whether the next change is:
    - topic structure
    - project content
    - UI polish
@@ -255,4 +279,4 @@ The HTML feature currently combines:
 - detailed project briefs
 - visual inspiration references
 
-This makes the HTML module feel like a guided learning product instead of only a progress list.
+This makes the HTML module feel like a guided learning product instead of only a progress list. Future work follows the same pattern: **content in `modules.ts` and `htmlProjects.ts`, HTML UI in `src/features/html/`, shared screens in `src/pages/` and `src/components/`, routes and state in `App.tsx`**.
