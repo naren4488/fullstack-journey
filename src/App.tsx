@@ -6,6 +6,7 @@ import {
   JOURNEY_MODULES_STORAGE_KEY,
   mergeStoredProgress,
 } from './lib/journeyStorage'
+import { updateLastActivity } from './lib/smartNotifications'
 import { DashboardPage } from './pages/DashboardPage'
 import { ModuleDetailsPage } from './pages/ModuleDetailsPage'
 import { ModuleQuizPage } from './pages/ModuleQuizPage'
@@ -46,6 +47,8 @@ function App() {
           : module,
       ),
     )
+    // Track activity when user completes a topic
+    updateLastActivity()
   }
 
   return (

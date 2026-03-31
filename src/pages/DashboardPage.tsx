@@ -4,6 +4,8 @@ import type { Module } from '../data/modules'
 import { MetricCard } from '../components/MetricCard'
 import { ModuleCard } from '../components/ModuleCard'
 import { Shell } from '../layout/Shell'
+import { SmartNotifications } from '../components/SmartNotifications'
+import { getSmartNotifications } from '../lib/smartNotifications'
 import { normalizeSearchQuery, textMatchesQuery } from '../lib/searchNormalize'
 
 export function DashboardPage({
@@ -48,6 +50,8 @@ export function DashboardPage({
     .filter((module) => module.remaining > 0)
     .sort((a, b) => a.remaining - b.remaining)
     .slice(0, 4)
+
+  const notifications = useMemo(() => getSmartNotifications(modules), [modules])
 
   return (
     <Shell
@@ -139,6 +143,8 @@ export function DashboardPage({
           </div>
         </div>
       </section>
+
+      <SmartNotifications notifications={notifications} />
 
       <section className="space-y-3">
         {normalizeSearchQuery(searchQuery) ? (
