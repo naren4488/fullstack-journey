@@ -29,7 +29,7 @@ export function ModuleCard({ module }: { module: Module }) {
 
       <div className="mt-5 h-2 overflow-hidden rounded-full bg-stone-200">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-600"
+          className="h-full rounded-full bg-linear-to-r from-amber-500 to-orange-600"
           style={{ width: `${stats.percent}%` }}
         />
       </div>

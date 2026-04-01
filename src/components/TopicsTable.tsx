@@ -59,7 +59,7 @@ export function TopicsTable({
         </div>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-[1.5rem] border border-stone-200">
+      <div className="mt-6 overflow-hidden rounded-3xl border border-stone-200">
         <div className="overflow-x-auto">
           <table className="min-w-full border-collapse">
             <thead className="bg-stone-100/90 text-left">

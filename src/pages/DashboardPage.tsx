@@ -59,7 +59,7 @@ export function DashboardPage({
       onSearch={onSearch}
       modules={modules}
     >
-      <section className="overflow-hidden rounded-[2rem] border border-stone-200/70 bg-white/75 shadow-[0_20px_80px_rgba(87,57,24,0.10)] backdrop-blur">
+      <section className="overflow-hidden rounded-4xl border border-stone-200/70 bg-white/75 shadow-[0_20px_80px_rgba(87,57,24,0.10)] backdrop-blur">
         <div className="grid gap-8 px-6 py-8 sm:px-8 lg:grid-cols-[1.3fr_0.7fr] lg:px-10 lg:py-10">
           <div className="space-y-5">
             <div className="inline-flex items-center rounded-full border border-amber-300/70 bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-amber-900">
@@ -102,7 +102,7 @@ export function DashboardPage({
               </div>
               <div className="h-3 overflow-hidden rounded-full bg-stone-200">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-stone-900"
+                  className="h-full rounded-full bg-linear-to-r from-amber-500 via-orange-500 to-stone-900"
                   style={{ width: `${overallProgress}%` }}
                 />
               </div>

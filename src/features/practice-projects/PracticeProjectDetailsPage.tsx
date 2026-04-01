@@ -4,6 +4,7 @@ import { MetricCard } from '../../components/MetricCard'
 import { NotFoundPage } from '../../components/NotFoundPage'
 import { ProjectCodeWalkthroughPanel } from '../../components/ProjectCodeWalkthroughPanel'
 import { ProjectRequirementsChecklist } from '../../components/ProjectRequirementsChecklist'
+import { ProjectSubmissionForm } from '../../components/ProjectSubmissionForm'
 import { getModuleBySlug } from '../../data/modules'
 import {
   getPracticeProjectForModule,
@@ -72,7 +73,7 @@ export function PracticeProjectDetailsPage() {
         className="flex flex-wrap items-stretch justify-between gap-3 rounded-2xl border border-stone-200/90 bg-white/75 p-4 shadow-[0_8px_30px_rgba(87,57,24,0.06)]"
         aria-label="Projects in this module"
       >
-        <div className="min-w-[160px] max-w-md flex-1">
+        <div className="min-w-40 max-w-md flex-1">
           {prevProject ? (
             <Link
               to={`/modules/${moduleSlug}/projects/${prevProject.slug}`}
@@ -91,7 +92,7 @@ export function PracticeProjectDetailsPage() {
             </span>
           )}
         </div>
-        <div className="min-w-[160px] max-w-md flex-1 text-right">
+        <div className="min-w-40 max-w-md flex-1 text-right">
           {nextProject ? (
             <Link
               to={`/modules/${moduleSlug}/projects/${nextProject.slug}`}
@@ -112,7 +113,7 @@ export function PracticeProjectDetailsPage() {
         </div>
       </nav>
 
-      <section className="overflow-hidden rounded-[2rem] border border-stone-200/80 bg-white/85 shadow-[0_20px_80px_rgba(87,57,24,0.10)]">
+      <section className="overflow-hidden rounded-4xl border border-stone-200/80 bg-white/85 shadow-[0_20px_80px_rgba(87,57,24,0.10)]">
         <div className="grid gap-8 px-6 py-8 lg:grid-cols-[1.1fr_0.9fr] lg:px-10 lg:py-10">
           <div>
             <p className={`text-xs font-bold uppercase tracking-[0.24em] ${ui.taglineClass}`}>
@@ -219,6 +220,12 @@ export function PracticeProjectDetailsPage() {
         />
       </section>
 
+      <ProjectSubmissionForm
+        moduleSlug={moduleSlug}
+        projectSlug={projectSlug}
+        requirements={project.requirements}
+      />
+
       <section className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
         <InfoListCard
           title="Topics You Will Practice"
@@ -254,9 +261,9 @@ export function PracticeProjectDetailsPage() {
           {project.visualReferences.map((reference) => (
             <article
               key={reference.sourceUrl}
-              className="overflow-hidden rounded-[1.5rem] border border-stone-200 bg-stone-50"
+              className="overflow-hidden rounded-3xl border border-stone-200 bg-stone-50"
             >
-              <div className="relative aspect-[16/10] overflow-hidden bg-stone-200">
+              <div className="relative aspect-16/10 overflow-hidden bg-stone-200">
                 <img
                   src={reference.image}
                   alt={reference.title}

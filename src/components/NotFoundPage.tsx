@@ -4,7 +4,7 @@ import { Shell } from '../layout/Shell'
 export function NotFoundPage() {
   return (
     <Shell>
-      <section className="rounded-[2rem] border border-stone-200/80 bg-white/80 p-10 text-center shadow-[0_16px_40px_rgba(87,57,24,0.08)]">
+      <section className="rounded-4xl border border-stone-200/80 bg-white/80 p-10 text-center shadow-[0_16px_40px_rgba(87,57,24,0.08)]">
         <p className="text-xs font-bold uppercase tracking-[0.24em] text-stone-500">
           404
         </p>

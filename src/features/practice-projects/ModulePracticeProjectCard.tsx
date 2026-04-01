@@ -21,7 +21,7 @@ export function ModulePracticeProjectCard({
   return (
     <Link
       to={`/modules/${moduleSlug}/projects/${project.slug}`}
-      className={`group overflow-hidden rounded-[1.5rem] border-2 bg-stone-950 text-white transition hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(87,57,24,0.18)] ${ui.cardRingClass}`}
+      className={`group overflow-hidden rounded-3xl border-2 bg-stone-950 text-white transition hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(87,57,24,0.18)] ${ui.cardRingClass}`}
     >
       <div className="relative px-5 py-5">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(245,158,11,0.12),transparent_45%,rgba(255,255,255,0.04))]" />

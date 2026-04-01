@@ -5,6 +5,7 @@ import { NotFoundPage } from '../components/NotFoundPage'
 import { TopicsTable } from '../components/TopicsTable'
 import { getModuleQuiz } from '../data/moduleQuizzes'
 import { ModulePracticeProjectsSection } from '../features/practice-projects/ModulePracticeProjectsSection'
+import { ModuleProjectSubmissionsOverview } from '../features/practice-projects/ModuleProjectSubmissionsOverview'
 import { Shell } from '../layout/Shell'
 import { getPracticeProjectsForModule } from '../data/practiceProjectLookup'
 import { getModuleBySlugFromList, getModuleProgress } from '../lib/moduleUtils'
@@ -28,7 +29,7 @@ function ModuleDetailsMainContent({
 
   return (
     <>
-      <section className="overflow-hidden rounded-[2rem] border border-stone-200/70 bg-white/80 shadow-[0_20px_80px_rgba(87,57,24,0.10)] backdrop-blur">
+      <section className="overflow-hidden rounded-4xl border border-stone-200/70 bg-white/80 shadow-[0_20px_80px_rgba(87,57,24,0.10)] backdrop-blur">
         <div className="grid gap-8 px-6 py-8 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-10">
           <div className="space-y-5">
             <div className="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-amber-900">
@@ -58,7 +59,7 @@ function ModuleDetailsMainContent({
               </div>
               <div className="h-3 overflow-hidden rounded-full bg-stone-200">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-amber-500 to-stone-900"
+                  className="h-full rounded-full bg-linear-to-r from-amber-500 to-stone-900"
                   style={{ width: `${stats.percent}%` }}
                 />
               </div>
@@ -99,6 +100,18 @@ function ModuleDetailsMainContent({
         onToggleTopic={onToggleTopic}
         filterQuery={searchQuery}
       />
+
+      {stats.percent === 100 ? (
+        <ModuleProjectSubmissionsOverview moduleSlug={module.slug} />
+      ) : (
+        <section className="rounded-2xl border border-amber-200/80 bg-amber-50/70 p-6 shadow-[0_16px_40px_rgba(235,210,163,0.35)]">
+          <h2 className="text-lg font-bold text-amber-950">Finish topic tracker first</h2>
+          <p className="mt-2 text-sm text-amber-800">
+            Project submission is enabled only after you complete all module topics.
+            ({stats.completed}/{stats.total} topics done)
+          </p>
+        </section>
+      )}
 
       <section className="rounded-[1.75rem] border border-stone-200/80 bg-white/80 p-6 shadow-[0_16px_40px_rgba(87,57,24,0.08)]">
         <h2 className="text-lg font-bold text-stone-950">Practice questions</h2>
