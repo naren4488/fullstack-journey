@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { FeatureIcon } from './FeatureIcon'
 import {
   loadSubmission,
@@ -11,6 +13,8 @@ import {
   loadRequirementChecks,
 } from '../lib/projectRequirementChecks'
 
+import { useSubmitProjectMutation } from '../api/baseApi'
+
 export function ProjectSubmissionForm({
   moduleSlug,
   projectSlug,
@@ -20,6 +24,7 @@ export function ProjectSubmissionForm({
   projectSlug: string
   requirements: string[]
 }) {
+  const [submitProject, { isLoading: isSubmitting }] = useSubmitProjectMutation()
   const [githubUrl, setGithubUrl] = useState(() => {
     const submission = loadSubmission(moduleSlug, projectSlug)
     return submission?.githubUrl || ''
@@ -42,7 +47,7 @@ export function ProjectSubmissionForm({
   const allComplete = checks.every(Boolean)
   const completedCount = checks.filter(Boolean).length
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setErrorMessage('')
     setSuccessMessage('')
@@ -75,20 +80,33 @@ export function ProjectSubmissionForm({
       return
     }
 
-    // Save submission
-    const submission: ProjectSubmission = {
-      githubUrl: githubUrl.trim(),
-      liveDemoUrl: liveDemoUrl.trim(),
-      submittedAt: Date.now(),
+    try {
+      await submitProject({
+        moduleSlug,
+        projectSlug,
+        githubUrl: githubUrl.trim(),
+        liveUrl: liveDemoUrl.trim(),
+      }).unwrap()
+
+      const submission: ProjectSubmission = {
+        githubUrl: githubUrl.trim(),
+        liveDemoUrl: liveDemoUrl.trim(),
+        submittedAt: Date.now(),
+      }
+
+      saveSubmission(moduleSlug, projectSlug, submission)
+      setSubmitted(true)
+      setIsEditing(false)
+      setSuccessMessage('Project submitted successfully! ✓')
+
+      toast.success('Project submitted successfully ✅', { position: 'top-right', autoClose: 1000 })
+
+      setTimeout(() => setSuccessMessage(''), 5000)
+    } catch (err) {
+      console.error('Failed to submit project', err)
+      setErrorMessage('Submission failed. Please try again.')
+      toast.error('Submission failed ❌', { position: 'top-right', autoClose: 1000 })
     }
-
-    saveSubmission(moduleSlug, projectSlug, submission)
-    setSubmitted(true)
-    setIsEditing(false)
-    setSuccessMessage('Project submitted successfully! ✓')
-
-    // Clear success message after 5 seconds
-    setTimeout(() => setSuccessMessage(''), 5000)
   }
 
   function handleEdit() {
@@ -124,7 +142,9 @@ export function ProjectSubmissionForm({
   }
 
   return (
-    <section className="rounded-[1.75rem] border border-stone-200/80 bg-white/80 p-6 shadow-[0_16px_40px_rgba(87,57,24,0.08)]">
+    <>
+      <ToastContainer position="top-right" autoClose={1000} hideProgressBar={false} newestOnTop closeOnClick pauseOnHover draggable theme="light" />
+      <section className="rounded-[1.75rem] border border-stone-200/80 bg-white/80 p-6 shadow-[0_16px_40px_rgba(87,57,24,0.08)]">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-start gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-900">
@@ -220,10 +240,10 @@ export function ProjectSubmissionForm({
           <div className="flex flex-wrap gap-3 pt-2">
             <button
               type="submit"
-              disabled={!allComplete}
+              disabled={!allComplete || isSubmitting}
               className="flex-1 rounded-xl bg-blue-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:bg-stone-300 disabled:text-stone-500 disabled:cursor-not-allowed sm:flex-none"
             >
-              {submitted && !isEditing ? 'Update Submission' : 'Submit Project'}
+              {isSubmitting ? 'Submitting...' : submitted && !isEditing ? 'Update Submission' : 'Submit Project'}
             </button>
             {isEditing && (
               <button
@@ -287,5 +307,6 @@ export function ProjectSubmissionForm({
         </div>
       )}
     </section>
+    </>
   )
 }

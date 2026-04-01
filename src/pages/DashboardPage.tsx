@@ -7,6 +7,7 @@ import { Shell } from '../layout/Shell'
 import { SmartNotifications } from '../components/SmartNotifications'
 import { getSmartNotifications } from '../lib/smartNotifications'
 import { normalizeSearchQuery, textMatchesQuery } from '../lib/searchNormalize'
+import { useGetStateQuery } from '../api/baseApi'
 
 export function DashboardPage({
   modules,
@@ -17,6 +18,8 @@ export function DashboardPage({
   searchQuery: string
   onSearch: (query: string) => void
 }) {
+  const { data: stateData, error: stateError, isLoading: stateLoading, refetch } = useGetStateQuery()
+
   const filteredModules = useMemo(() => {
     const q = normalizeSearchQuery(searchQuery)
     if (!q) return modules
@@ -53,6 +56,8 @@ export function DashboardPage({
 
   const notifications = useMemo(() => getSmartNotifications(modules), [modules])
 
+  const isApiData = stateData && !stateError && !stateLoading
+
   return (
     <Shell
       searchQuery={searchQuery}
@@ -65,6 +70,41 @@ export function DashboardPage({
             <div className="inline-flex items-center rounded-full border border-amber-300/70 bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-amber-900">
               Frontend Journey Dashboard
             </div>
+            {isApiData ? (
+              <div className="inline-flex items-center gap-2 rounded-full border border-green-300/70 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
+                <span className="h-2 w-2 rounded-full bg-green-500"></span>
+                Live from server
+                <button
+                  onClick={() => refetch()}
+                  className="ml-1 rounded px-1.5 py-0.5 text-xs bg-green-100 hover:bg-green-200 transition"
+                  title="Refresh data"
+                >
+                  ↻
+                </button>
+              </div>
+            ) : stateError ? (
+              <div className="inline-flex items-center gap-2 rounded-full border border-red-300/70 bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
+                <span className="h-2 w-2 rounded-full bg-red-500"></span>
+                Offline mode
+                <button
+                  onClick={() => refetch()}
+                  className="ml-1 rounded px-1.5 py-0.5 text-xs bg-red-100 hover:bg-red-200 transition"
+                  title="Retry connection"
+                >
+                  ↻
+                </button>
+              </div>
+            ) : stateLoading ? (
+              <div className="inline-flex items-center gap-2 rounded-full border border-stone-300/70 bg-stone-50 px-3 py-1 text-xs font-semibold text-stone-600">
+                <span className="h-2 w-2 rounded-full bg-stone-400 animate-pulse"></span>
+                Loading...
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 rounded-full border border-stone-300/70 bg-stone-50 px-3 py-1 text-xs font-semibold text-stone-600">
+                <span className="h-2 w-2 rounded-full bg-stone-400"></span>
+                Local data
+              </div>
+            )}
             <div className="space-y-3">
               <h1 className="max-w-3xl text-4xl font-black tracking-tight text-stone-950 sm:text-5xl">
                 Explore the roadmap one module at a time.
@@ -145,6 +185,28 @@ export function DashboardPage({
       </section>
 
       <SmartNotifications notifications={notifications} />
+
+      {stateError && (
+        <div className="rounded-2xl border border-red-200/70 bg-red-50/60 p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+              ⚠️
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-red-900">Server Connection Issue</h3>
+              <p className="text-sm text-red-700">
+                Using local data. Check console for details.
+              </p>
+            </div>
+            <button
+              onClick={() => refetch()}
+              className="rounded-lg border border-red-300 bg-white px-3 py-1 text-sm font-medium text-red-700 hover:bg-red-50 transition"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      )}
 
       <section className="space-y-3">
         {normalizeSearchQuery(searchQuery) ? (

@@ -23,10 +23,21 @@ export type SmartNotification = {
 const LAST_ACTIVITY_KEY = 'journey-last-activity';
 const STREAK_KEY = 'journey-study-streak';
 
-export function updateLastActivity(): void {
+export async function updateLastActivity(): Promise<void> {
   const now = new Date().toISOString();
   localStorage.setItem(LAST_ACTIVITY_KEY, now);
   updateStreak();
+
+  try {
+    await fetch('http://localhost:8080/api/v1/activity/touch', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  } catch (error) {
+    console.warn('[ACTIVITY TOUCH ERROR] Cannot send activity touch to backend:', error)
+  }
 }
 
 export function getLastActivityDate(): Date | null {

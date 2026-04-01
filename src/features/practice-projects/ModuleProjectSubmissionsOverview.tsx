@@ -5,6 +5,10 @@ import { getModulePracticeUi } from './modulePracticeUi'
 import {
   loadRequirementChecks,
 } from '../../lib/projectRequirementChecks'
+import {
+  useSubmitModuleMutation,
+  useDeleteModuleSubmissionMutation,
+} from '../../api/baseApi'
 
 export type ModuleSubmission = {
   githubUrl: string
@@ -78,6 +82,9 @@ export function ModuleProjectSubmissionsOverview({
   const [errorMessage, setErrorMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
 
+  const [submitModule, { isLoading: isSubmitting }] = useSubmitModuleMutation()
+  const [deleteModuleSubmissionApi, { isLoading: isDeleting }] = useDeleteModuleSubmissionMutation()
+
   const projects = getPracticeProjectsForModule(moduleSlug)
 
   if (projects.length === 0) return null
@@ -93,7 +100,7 @@ export function ModuleProjectSubmissionsOverview({
   const moduleReady = projects.length > 0 && combinedChecks.every(Boolean)
   const completedProjects = combinedChecks.filter(Boolean).length
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setErrorMessage('')
     setSuccessMessage('')
@@ -128,19 +135,29 @@ export function ModuleProjectSubmissionsOverview({
       return
     }
 
-    // Save submission
     const submission: ModuleSubmission = {
       githubUrl: githubUrl.trim(),
       liveDemoUrl: liveDemoUrl.trim(),
       submittedAt: Date.now(),
     }
 
-    saveModuleSubmission(moduleSlug, submission)
-    setSubmitted(true)
-    setIsEditing(false)
-    setSuccessMessage('Module submission successful! ✓')
+    // Send module submission to backend
+    try {
+      await submitModule({
+        moduleSlug,
+        githubUrl: submission.githubUrl,
+        liveUrl: submission.liveDemoUrl,
+      }).unwrap()
 
-    setTimeout(() => setSuccessMessage(''), 5000)
+      saveModuleSubmission(moduleSlug, submission)
+      setSubmitted(true)
+      setIsEditing(false)
+      setSuccessMessage('Module submission successful! ✓')
+      setTimeout(() => setSuccessMessage(''), 5000)
+    } catch (err) {
+      console.error('Failed to submit module', err)
+      setErrorMessage('Failed to submit module. Please try again.')
+    }
   }
 
   function handleEdit() {
@@ -163,8 +180,13 @@ export function ModuleProjectSubmissionsOverview({
     setSuccessMessage('')
   }
 
-  function handleDelete() {
-    if (confirm('Are you sure you want to remove this submission?')) {
+  async function handleDelete() {
+    if (!confirm('Are you sure you want to remove this submission?')) {
+      return
+    }
+
+    try {
+      await deleteModuleSubmissionApi({ moduleSlug }).unwrap()
       deleteModuleSubmission(moduleSlug)
       setSubmitted(false)
       setIsEditing(false)
@@ -172,6 +194,9 @@ export function ModuleProjectSubmissionsOverview({
       setLiveDemoUrl('')
       setErrorMessage('')
       setSuccessMessage('')
+    } catch (err) {
+      console.error('Failed to delete module submission', err)
+      setErrorMessage('Failed to delete module submission. Please try again.')
     }
   }
 
@@ -269,7 +294,7 @@ export function ModuleProjectSubmissionsOverview({
           <div className="flex flex-wrap gap-3 pt-2">
             <button
               type="submit"
-              disabled={!moduleReady}
+              disabled={!moduleReady || isSubmitting}
               className="flex-1 rounded-xl bg-blue-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:bg-stone-300 disabled:text-stone-500 disabled:cursor-not-allowed sm:flex-none"
             >
               {submitted && !isEditing ? 'Update Submission' : 'Submit'}
@@ -328,9 +353,10 @@ export function ModuleProjectSubmissionsOverview({
             </button>
             <button
               onClick={handleDelete}
-              className="flex-1 rounded-xl border border-red-300 px-6 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 sm:flex-none"
+              disabled={isDeleting}
+              className="flex-1 rounded-xl border border-red-300 px-6 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 disabled:opacity-60 disabled:cursor-not-allowed sm:flex-none"
             >
-              Remove
+              {isDeleting ? 'Removing...' : 'Remove'}
             </button>
           </div>
         </div>
