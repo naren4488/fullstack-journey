@@ -9,6 +9,7 @@ import {
   useSubmitModuleMutation,
   useDeleteModuleSubmissionMutation,
 } from '../../api/baseApi'
+import toast from 'react-hot-toast'
 
 export type ModuleSubmission = {
   githubUrl: string
@@ -153,10 +154,12 @@ export function ModuleProjectSubmissionsOverview({
       setSubmitted(true)
       setIsEditing(false)
       setSuccessMessage('Module submission successful! ✓')
+      toast.success('Module submitted successfully! 🎉', { position: 'top-right', duration: 2000 })
       setTimeout(() => setSuccessMessage(''), 5000)
     } catch (err) {
       console.error('Failed to submit module', err)
       setErrorMessage('Failed to submit module. Please try again.')
+      toast.error('Module submission failed. Please check your inputs and try again.', { position: 'top-right', duration: 3000 })
     }
   }
 
@@ -194,9 +197,11 @@ export function ModuleProjectSubmissionsOverview({
       setLiveDemoUrl('')
       setErrorMessage('')
       setSuccessMessage('')
+      toast.success('Module submission removed successfully.', { position: 'top-right', duration: 2000 })
     } catch (err) {
       console.error('Failed to delete module submission', err)
       setErrorMessage('Failed to delete module submission. Please try again.')
+      toast.error('Failed to remove submission. Please try again.', { position: 'top-right', duration: 3000 })
     }
   }
 

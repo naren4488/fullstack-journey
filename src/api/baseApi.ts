@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { StateResponseSchema } from './schemas/state.schema'
 import { UpdateTopicRequestSchema } from './schemas/topic.schema'
 import { ProjectSubmissionSchema } from './schemas/project.schema'
+import toast from 'react-hot-toast'
 
 export const api = createApi({
   reducerPath: 'api',
@@ -12,6 +13,7 @@ export const api = createApi({
     if (result.error) {
       // global error logging
       console.error('[RTK QUERY ERROR]', result.error)
+      toast.error('Connection error. Please check your internet and try again.', { position: 'top-right', duration: 3000 })
     }
 
     return result

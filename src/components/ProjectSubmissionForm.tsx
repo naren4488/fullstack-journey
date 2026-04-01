@@ -54,29 +54,39 @@ export function ProjectSubmissionForm({
 
     // Validate: Check if all requirements are completed
     if (!allComplete) {
-      setErrorMessage('Please complete all checklist items of this module first.')
+      const msg = 'Please complete all checklist items of this module first.'
+      setErrorMessage(msg)
+      toast.error(msg, { position: 'top-right', autoClose: 3000 })
       return
     }
 
     // Validate: GitHub URL
     if (!githubUrl.trim()) {
-      setErrorMessage('GitHub repository URL is required.')
+      const msg = 'GitHub repository URL is required.'
+      setErrorMessage(msg)
+      toast.error(msg, { position: 'top-right', autoClose: 2000 })
       return
     }
 
     if (!isValidUrl(githubUrl)) {
-      setErrorMessage('Please enter a valid GitHub repository URL (e.g., https://github.com/username/repo)')
+      const msg = 'Please enter a valid GitHub repository URL (e.g., https://github.com/username/repo)'
+      setErrorMessage(msg)
+      toast.error(msg, { position: 'top-right', autoClose: 3000 })
       return
     }
 
     // Validate: Live Demo URL
     if (!liveDemoUrl.trim()) {
-      setErrorMessage('Live demo link is required.')
+      const msg = 'Live demo link is required.'
+      setErrorMessage(msg)
+      toast.error(msg, { position: 'top-right', autoClose: 2000 })
       return
     }
 
     if (!isValidUrl(liveDemoUrl)) {
-      setErrorMessage('Please enter a valid live demo URL (e.g., https://example.com)')
+      const msg = 'Please enter a valid live demo URL (e.g., https://example.com)'
+      setErrorMessage(msg)
+      toast.error(msg, { position: 'top-right', autoClose: 3000 })
       return
     }
 

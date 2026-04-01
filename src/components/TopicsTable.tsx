@@ -6,6 +6,7 @@ import { getTopicWhyMatters } from '../data/topicWhyMatters'
 import { practiceProjectsForTopicLabel } from '../lib/practiceProjectsForTopic'
 import { normalizeSearchQuery, textMatchesQuery } from '../lib/searchNormalize'
 import { topicRowId } from '../lib/topicRowId'
+import toast from 'react-hot-toast'
 
 export function TopicsTable({
   module,
@@ -140,7 +141,10 @@ export function TopicsTable({
                   <td className="px-4 py-4 align-middle text-right">
                     <button
                       type="button"
-                      onClick={() => onToggleTopic(module.slug, topic.label)}
+                      onClick={() => {
+                        onToggleTopic(module.slug, topic.label)
+                        toast.success(`Topic "${topic.label}" ${topic.done ? 'marked incomplete' : 'marked complete'}`, { position: 'top-right', duration: 1500 })
+                      }}
                       className={[
                         'inline-flex min-w-36 items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition',
                         topic.done

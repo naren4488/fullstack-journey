@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import type { Module } from '../data/modules'
 import { MetricCard } from '../components/MetricCard'
@@ -8,6 +8,7 @@ import { SmartNotifications } from '../components/SmartNotifications'
 import { getSmartNotifications } from '../lib/smartNotifications'
 import { normalizeSearchQuery, textMatchesQuery } from '../lib/searchNormalize'
 import { useGetStateQuery } from '../api/baseApi'
+import toast from 'react-hot-toast'
 
 export function DashboardPage({
   modules,
@@ -19,6 +20,12 @@ export function DashboardPage({
   onSearch: (query: string) => void
 }) {
   const { data: stateData, error: stateError, isLoading: stateLoading, refetch } = useGetStateQuery()
+
+  useEffect(() => {
+    if (stateError) {
+      toast.error('Unable to load server data. Using local data instead.', { position: 'top-right', duration: 4000 })
+    }
+  }, [stateError])
 
   const filteredModules = useMemo(() => {
     const q = normalizeSearchQuery(searchQuery)

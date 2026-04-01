@@ -1,4 +1,5 @@
 import type { Module } from '../data/modules';
+import toast from 'react-hot-toast'
 
 export type StudySuggestion = {
   type: 'topic' | 'module';
@@ -37,6 +38,7 @@ export async function updateLastActivity(): Promise<void> {
     })
   } catch (error) {
     console.warn('[ACTIVITY TOUCH ERROR] Cannot send activity touch to backend:', error)
+    toast.error('Could not sync activity. Progress saved locally.', { position: 'top-right', duration: 2000 })
   }
 }
 
