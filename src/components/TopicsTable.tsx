@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import type { Module } from '../data/modules'
 import type { PracticeProject } from '../data/practiceProject'
+import { getTopicKeyPoints } from '../data/topicKeyPoints'
 import { getTopicWhyMatters } from '../data/topicWhyMatters'
 import { practiceProjectsForTopicLabel } from '../lib/practiceProjectsForTopic'
 import { normalizeSearchQuery, textMatchesQuery } from '../lib/searchNormalize'
@@ -27,6 +28,14 @@ export function TopicsTable({
       if (textMatchesQuery(topic.label, q)) return true
       const why = getTopicWhyMatters(module.slug, topic.label)
       if (why && textMatchesQuery(why, q)) return true
+      const keyPoints = getTopicKeyPoints(module.slug, topic.label)
+      if (
+        keyPoints?.some(
+          (kp) =>
+            textMatchesQuery(kp.name, q) || textMatchesQuery(kp.description, q),
+        )
+      )
+        return true
       const topicProjects = practiceProjectsForTopicLabel(
         practiceProjects,
         topic.label,
@@ -88,6 +97,10 @@ export function TopicsTable({
                   topic.label,
                 )
                 const topicWhy = getTopicWhyMatters(module.slug, topic.label)
+                const topicKeyPoints = getTopicKeyPoints(
+                  module.slug,
+                  topic.label,
+                )
                 return (
                 <tr
                   key={topic.label}
@@ -98,17 +111,33 @@ export function TopicsTable({
                     {String(index + 1).padStart(2, '0')}
                   </td>
                   <td className="px-4 py-4 align-middle">
-                    <div className="font-semibold text-stone-950">
-                      {topic.label}
-                    </div>
+                    <div className="topic-detail-title">{topic.label}</div>
                     {topicWhy ? (
-                      <details className="mt-2 max-w-xl text-left">
-                        <summary className="cursor-pointer list-none text-xs font-semibold text-amber-800 hover:text-amber-950 [&::-webkit-details-marker]:hidden">
+                      <details className="topic-detail-section">
+                        <summary className="topic-heading topic-heading-why">
                           Why this matters
                         </summary>
                         <p className="mt-2 text-xs leading-5 text-stone-600">
                           {topicWhy}
                         </p>
+                      </details>
+                    ) : null}
+                    {topicKeyPoints && topicKeyPoints.length > 0 ? (
+                      <details className="topic-detail-section">
+                        <summary className="topic-heading topic-heading-key">
+                          Key ideas
+                        </summary>
+                        <ul className="mt-2 list-inside list-disc space-y-1 text-xs leading-5 text-stone-600">
+                          {topicKeyPoints.map((kp) => (
+                            <li key={kp.name}>
+                              <span className="font-medium text-stone-800">
+                                {kp.name}
+                              </span>
+                              {': '}
+                              {kp.description}
+                            </li>
+                          ))}
+                        </ul>
                       </details>
                     ) : null}
                     {topicProjects.length > 0 ? (

@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@layer components {
+  .topic-detail-title {
+    @apply font-semibold text-stone-950 text-[16px];
+  }
+
+  .topic-heading {
+    @apply cursor-pointer list-none text-sm font-semibold [&::-webkit-details-marker]:hidden;
+  }
+
+  .topic-heading-why {
+    @apply text-amber-800 hover:text-amber-950;
+  }
+
+  .topic-heading-key {
+    @apply text-stone-600 hover:text-stone-900;
+  }
+
+  .topic-detail-section {
+    @apply mt-[9px] max-w-xl text-left;
+  }
+}
