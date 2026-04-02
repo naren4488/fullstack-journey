@@ -154,21 +154,23 @@ export function ProjectSubmissionForm({
   return (
     <>
       <ToastContainer position="top-right" autoClose={1000} hideProgressBar={false} newestOnTop closeOnClick pauseOnHover draggable theme="light" />
-      <section className="rounded-[1.75rem] border border-stone-200/80 bg-white/80 p-6 shadow-[0_16px_40px_rgba(87,57,24,0.08)]">
+      <section className="rounded-[1.75rem] border border-stone-200/80 bg-white/80 p-6 shadow-[0_16px_40px_rgba(87,57,24,0.08)] transition-colors duration-300 dark:border-stone-700/80 dark:bg-stone-900/80 dark:shadow-[0_16px_40px_rgba(0,0,0,0.35)]">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-900">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-900 dark:bg-blue-950/60 dark:text-blue-200">
             <FeatureIcon type="flag" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-stone-950">Submit your project</h2>
-            <p className="mt-2 text-sm leading-6 text-stone-600">
+            <h2 className="text-2xl font-bold text-stone-950 dark:text-stone-50">
+              Submit your project
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-stone-600 dark:text-stone-400">
               Share your GitHub repository and live demo link.
             </p>
           </div>
         </div>
         {submitted && !isEditing && (
-          <div className="rounded-full border border-green-300 bg-green-50 px-4 py-2 text-sm font-semibold text-green-700 flex items-center gap-2">
+          <div className="flex items-center gap-2 rounded-full border border-green-300 bg-green-50 px-4 py-2 text-sm font-semibold text-green-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
             <span>✓</span> Submitted
           </div>
         )}
@@ -176,11 +178,11 @@ export function ProjectSubmissionForm({
 
       {/* Completion Status */}
       {!allComplete && !submitted && (
-        <div className="mt-4 rounded-2xl border border-red-200/70 bg-red-50/60 px-4 py-3">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-red-900">
+        <div className="mt-4 rounded-2xl border border-red-200/70 bg-red-50/60 px-4 py-3 dark:border-red-900/50 dark:bg-red-950/30">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-red-900 dark:text-red-200">
             Action Required
           </p>
-          <p className="mt-2 text-sm leading-6 text-stone-800">
+          <p className="mt-2 text-sm leading-6 text-stone-800 dark:text-stone-300">
             Complete all <strong>{requirements.length}</strong> checklist items{' '}
             <strong>
               ({completedCount}/{requirements.length} done)
@@ -192,16 +194,18 @@ export function ProjectSubmissionForm({
 
       {/* Error Message */}
       {errorMessage && (
-        <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3">
-          <p className="text-sm font-semibold text-red-900">Error</p>
-          <p className="mt-1 text-sm text-red-800">{errorMessage}</p>
+        <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 dark:border-red-900/50 dark:bg-red-950/30">
+          <p className="text-sm font-semibold text-red-900 dark:text-red-200">Error</p>
+          <p className="mt-1 text-sm text-red-800 dark:text-red-300">{errorMessage}</p>
         </div>
       )}
 
       {/* Success Message */}
       {successMessage && (
-        <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 px-4 py-3">
-          <p className="text-sm font-semibold text-green-900">{successMessage}</p>
+        <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 dark:border-emerald-900/50 dark:bg-emerald-950/30">
+          <p className="text-sm font-semibold text-green-900 dark:text-emerald-200">
+            {successMessage}
+          </p>
         </div>
       )}
 
@@ -210,7 +214,10 @@ export function ProjectSubmissionForm({
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {/* GitHub URL Input */}
           <div>
-            <label htmlFor="github-url" className="block text-sm font-semibold text-stone-900">
+            <label
+              htmlFor="github-url"
+              className="block text-sm font-semibold text-stone-900 dark:text-stone-100"
+            >
               GitHub Repository URL
             </label>
             <input
@@ -220,16 +227,19 @@ export function ProjectSubmissionForm({
               value={githubUrl}
               onChange={(e) => setGithubUrl(e.target.value)}
               disabled={!allComplete && !submitted}
-              className="mt-2 w-full rounded-xl border border-stone-300 px-4 py-2 text-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:bg-stone-100 disabled:text-stone-500 disabled:cursor-not-allowed"
+              className="mt-2 w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:bg-stone-100 disabled:text-stone-500 dark:border-stone-600 dark:bg-stone-950 dark:text-stone-100 dark:disabled:bg-stone-800 dark:disabled:text-stone-500"
             />
-            <p className="mt-1 text-xs text-stone-500">
+            <p className="mt-1 text-xs text-stone-500 dark:text-stone-400">
               Make sure your repository is public or accessible to reviewers.
             </p>
           </div>
 
           {/* Live Demo URL Input */}
           <div>
-            <label htmlFor="demo-url" className="block text-sm font-semibold text-stone-900">
+            <label
+              htmlFor="demo-url"
+              className="block text-sm font-semibold text-stone-900 dark:text-stone-100"
+            >
               Live Demo Link
             </label>
             <input
@@ -239,9 +249,9 @@ export function ProjectSubmissionForm({
               value={liveDemoUrl}
               onChange={(e) => setLiveDemoUrl(e.target.value)}
               disabled={!allComplete && !submitted}
-              className="mt-2 w-full rounded-xl border border-stone-300 px-4 py-2 text-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:bg-stone-100 disabled:text-stone-500 disabled:cursor-not-allowed"
+              className="mt-2 w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:bg-stone-100 disabled:text-stone-500 dark:border-stone-600 dark:bg-stone-950 dark:text-stone-100 dark:disabled:bg-stone-800 dark:disabled:text-stone-500"
             />
-            <p className="mt-1 text-xs text-stone-500">
+            <p className="mt-1 text-xs text-stone-500 dark:text-stone-400">
               Link to your deployed/live version (Vercel, Netlify, GitHub Pages, etc.)
             </p>
           </div>
@@ -251,7 +261,7 @@ export function ProjectSubmissionForm({
             <button
               type="submit"
               disabled={!allComplete || isSubmitting}
-              className="flex-1 rounded-xl bg-blue-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:bg-stone-300 disabled:text-stone-500 disabled:cursor-not-allowed sm:flex-none"
+              className="flex-1 rounded-xl bg-blue-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-stone-300 disabled:text-stone-500 dark:hover:bg-blue-500 sm:flex-none"
             >
               {isSubmitting ? 'Submitting...' : submitted && !isEditing ? 'Update Submission' : 'Submit Project'}
             </button>
@@ -259,7 +269,7 @@ export function ProjectSubmissionForm({
               <button
                 type="button"
                 onClick={handleCancel}
-                className="flex-1 rounded-xl border border-stone-300 px-6 py-2 text-sm font-semibold text-stone-700 transition hover:bg-stone-50 sm:flex-none"
+                className="flex-1 rounded-xl border border-stone-300 px-6 py-2 text-sm font-semibold text-stone-700 transition hover:bg-stone-50 dark:border-stone-600 dark:text-stone-200 dark:hover:bg-stone-800 sm:flex-none"
               >
                 Cancel
               </button>
@@ -270,30 +280,30 @@ export function ProjectSubmissionForm({
         // Submitted State Display
         <div className="mt-6 space-y-4">
           {/* GitHub URL Display */}
-          <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-stone-600">
+          <div className="rounded-xl border border-stone-200 bg-stone-50 p-4 dark:border-stone-600 dark:bg-stone-800/50">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-stone-600 dark:text-stone-400">
               GitHub Repository
             </p>
             <a
               href={githubUrl}
               target="_blank"
               rel="noreferrer"
-              className="mt-2 break-all text-sm font-medium text-blue-600 hover:underline"
+              className="mt-2 break-all text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
             >
               {githubUrl}
             </a>
           </div>
 
           {/* Live Demo URL Display */}
-          <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-stone-600">
+          <div className="rounded-xl border border-stone-200 bg-stone-50 p-4 dark:border-stone-600 dark:bg-stone-800/50">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-stone-600 dark:text-stone-400">
               Live Demo
             </p>
             <a
               href={liveDemoUrl}
               target="_blank"
               rel="noreferrer"
-              className="mt-2 break-all text-sm font-medium text-blue-600 hover:underline"
+              className="mt-2 break-all text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
             >
               {liveDemoUrl}
             </a>
@@ -303,13 +313,13 @@ export function ProjectSubmissionForm({
           <div className="flex flex-wrap gap-3">
             <button
               onClick={handleEdit}
-              className="flex-1 rounded-xl border border-stone-300 px-6 py-2 text-sm font-semibold text-stone-700 transition hover:bg-stone-50 sm:flex-none"
+              className="flex-1 rounded-xl border border-stone-300 px-6 py-2 text-sm font-semibold text-stone-700 transition hover:bg-stone-50 dark:border-stone-600 dark:text-stone-200 dark:hover:bg-stone-800 sm:flex-none"
             >
               Edit
             </button>
             <button
               onClick={handleDelete}
-              className="flex-1 rounded-xl border border-red-300 px-6 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 sm:flex-none"
+              className="flex-1 rounded-xl border border-red-300 px-6 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40 sm:flex-none"
             >
               Remove
             </button>

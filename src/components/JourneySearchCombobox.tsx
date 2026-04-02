@@ -174,7 +174,7 @@ export function JourneySearchCombobox({
     <div ref={rootRef} className="relative w-full max-w-xl">
       <label
         htmlFor={id}
-        className="flex w-full flex-col gap-1.5 text-sm font-medium text-stone-700"
+        className="flex w-full flex-col gap-1.5 text-sm font-medium text-stone-700 dark:text-stone-300"
       >
         {label}
         <input
@@ -198,7 +198,7 @@ export function JourneySearchCombobox({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           autoComplete="off"
-          className="w-full rounded-xl border border-stone-200 bg-white px-3 py-2.5 text-stone-900 outline-none ring-amber-500/30 placeholder:text-stone-400 focus:ring-2"
+          className="w-full rounded-xl border border-stone-200 bg-white px-3 py-2.5 text-stone-900 outline-none ring-amber-500/30 transition-colors duration-300 placeholder:text-stone-400 focus:ring-2 dark:border-stone-600 dark:bg-stone-950 dark:text-stone-100 dark:placeholder:text-stone-500 dark:ring-amber-400/25"
         />
       </label>
 
@@ -206,11 +206,11 @@ export function JourneySearchCombobox({
         <div
           id={listboxId}
           role="listbox"
-          className="absolute z-50 mt-1 max-h-[min(70vh,24rem)] w-full overflow-auto rounded-xl border border-stone-200 bg-white py-2 shadow-lg"
+          className="absolute z-50 mt-1 max-h-[min(70vh,24rem)] w-full overflow-auto rounded-xl border border-stone-200 bg-white py-2 shadow-lg transition-colors duration-300 dark:border-stone-600 dark:bg-stone-900"
         >
           {showRecentsPanel ? (
             <div className="px-2 pb-2">
-              <p className="px-2 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500">
+              <p className="px-2 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500 dark:text-stone-400">
                 Recent searches
               </p>
               <ul className="space-y-0.5">
@@ -218,7 +218,7 @@ export function JourneySearchCombobox({
                   <li key={r}>
                     <button
                       type="button"
-                      className="w-full rounded-lg px-3 py-2 text-left text-sm text-stone-800 hover:bg-amber-50"
+                      className="w-full rounded-lg px-3 py-2 text-left text-sm text-stone-800 transition-colors duration-300 hover:bg-amber-50 dark:text-stone-200 dark:hover:bg-amber-950/40"
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => {
                         pushRecentSearch(r)
@@ -270,7 +270,7 @@ export function JourneySearchCombobox({
                 />
               ) : null}
               {noMatches ? (
-                <p className="px-4 py-3 text-sm text-stone-600">
+                <p className="px-4 py-3 text-sm text-stone-600 dark:text-stone-400">
                   No matches. Try a shorter keyword or check spelling.
                 </p>
               ) : null}
@@ -278,7 +278,7 @@ export function JourneySearchCombobox({
           ) : null}
 
           {open && !showRecentsPanel && !hasQuery && recents.length === 0 ? (
-            <p className="px-4 py-3 text-sm text-stone-500">
+            <p className="px-4 py-3 text-sm text-stone-500 dark:text-stone-400">
               Type to see modules, topics, and projects. Use ↑ ↓ and Enter to
               choose.
             </p>
@@ -307,8 +307,8 @@ function SuggestionGroup({
   setActiveIndex: (i: number) => void
 }) {
   return (
-    <div className="border-t border-stone-100 px-2 pt-2 first:border-t-0 first:pt-0">
-      <p className="px-2 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500">
+    <div className="border-t border-stone-100 px-2 pt-2 first:border-t-0 first:pt-0 dark:border-stone-700">
+      <p className="px-2 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500 dark:text-stone-400">
         {title}
       </p>
       <ul className="space-y-0.5">
@@ -322,21 +322,25 @@ function SuggestionGroup({
               role="option"
               aria-selected={isActive}
               className={[
-                'cursor-pointer rounded-lg px-3 py-2 text-sm',
-                isActive ? 'bg-amber-100 text-stone-950' : 'hover:bg-stone-50',
+                'cursor-pointer rounded-lg px-3 py-2 text-sm transition-colors duration-300',
+                isActive
+                  ? 'bg-amber-100 text-stone-950 dark:bg-amber-900/50 dark:text-stone-50'
+                  : 'hover:bg-stone-50 dark:hover:bg-stone-800/80',
               ].join(' ')}
               onMouseDown={(e) => e.preventDefault()}
               onMouseEnter={() => setActiveIndex(flatIdx)}
               onClick={() => onPick(s)}
             >
               <div className="flex items-start justify-between gap-2">
-                <span className="font-medium text-stone-900">{s.title}</span>
-                <span className="shrink-0 rounded bg-stone-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-stone-600">
+                <span className="font-medium text-stone-900 dark:text-stone-100">
+                  {s.title}
+                </span>
+                <span className="shrink-0 rounded bg-stone-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-stone-600 dark:bg-stone-800 dark:text-stone-300">
                   {kindLabel[s.kind]}
                 </span>
               </div>
               {s.subtitle ? (
-                <p className="mt-0.5 line-clamp-2 text-xs text-stone-500">
+                <p className="mt-0.5 line-clamp-2 text-xs text-stone-500 dark:text-stone-400">
                   {s.subtitle}
                 </p>
               ) : null}

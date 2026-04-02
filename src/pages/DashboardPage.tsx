@@ -71,10 +71,10 @@ export function DashboardPage({
       onSearch={onSearch}
       modules={modules}
     >
-      <section className="overflow-hidden rounded-4xl border border-stone-200/70 bg-white/75 shadow-[0_20px_80px_rgba(87,57,24,0.10)] backdrop-blur">
-        <div className="grid gap-8 px-6 py-8 sm:px-8 lg:grid-cols-[1.3fr_0.7fr] lg:px-10 lg:py-10">
+      <section className="overflow-hidden rounded-4xl border border-stone-200/70 bg-white/75 shadow-[0_20px_80px_rgba(87,57,24,0.10)] backdrop-blur transition-colors duration-300 dark:border-stone-700/70 dark:bg-stone-900/75 dark:shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
+z        <div className="grid gap-8 px-6 py-8 sm:px-8 lg:grid-cols-[1.3fr_0.7fr] lg:px-10 lg:py-10">
           <div className="space-y-5">
-            <div className="inline-flex items-center rounded-full border border-amber-300/70 bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-amber-900">
+            <div className="inline-flex items-center rounded-full border border-amber-300/70 bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-amber-900 dark:border-amber-700/50 dark:bg-amber-950/50 dark:text-amber-200">
               Frontend Journey Dashboard
             </div>
             {isApiData ? (
@@ -113,10 +113,10 @@ export function DashboardPage({
               </div>
             )}
             <div className="space-y-3">
-              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-stone-950 sm:text-5xl">
+              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-stone-950 sm:text-5xl dark:text-stone-50">
                 Explore the roadmap one module at a time.
               </h1>
-              <p className="max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">
+              <p className="max-w-2xl text-sm leading-7 text-stone-600 sm:text-base dark:text-stone-400">
                 Each module now opens into its own details page, so you can move
                 from a big-picture roadmap into focused study without losing
                 momentum.
@@ -124,7 +124,7 @@ export function DashboardPage({
               <p className="pt-1">
                 <Link
                   to="/projects"
-                  className="inline-flex items-center rounded-full border border-amber-400/80 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-950 transition hover:bg-amber-100"
+                  className="inline-flex items-center rounded-full border border-amber-400/80 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-950 transition hover:bg-amber-100 dark:border-amber-600/60 dark:bg-amber-950/40 dark:text-amber-100 dark:hover:bg-amber-900/50"
                 >
                   Browse all practice projects — search by module, level, duration
                 </Link>
@@ -141,13 +141,13 @@ export function DashboardPage({
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm font-medium text-stone-600">
+              <div className="flex items-center justify-between text-sm font-medium text-stone-600 dark:text-stone-400">
                 <span>Overall progress</span>
                 <span>
                   {completedTopics} / {totalTopics}
                 </span>
               </div>
-              <div className="h-3 overflow-hidden rounded-full bg-stone-200">
+              <div className="h-3 overflow-hidden rounded-full bg-stone-200 dark:bg-stone-700">
                 <div
                   className="h-full rounded-full bg-linear-to-r from-amber-500 via-orange-500 to-stone-900"
                   style={{ width: `${overallProgress}%` }}
@@ -194,20 +194,22 @@ export function DashboardPage({
       <SmartNotifications notifications={notifications} />
 
       {stateError && (
-        <div className="rounded-2xl border border-red-200/70 bg-red-50/60 p-4">
+        <div className="rounded-2xl border border-red-200/70 bg-red-50/60 p-4 dark:border-red-900/50 dark:bg-red-950/40">
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
               ⚠️
             </div>
             <div className="flex-1">
-              <h3 className="text-sm font-semibold text-red-900">Server Connection Issue</h3>
-              <p className="text-sm text-red-700">
+              <h3 className="text-sm font-semibold text-red-900 dark:text-red-200">
+                Server Connection Issue
+              </h3>
+              <p className="text-sm text-red-700 dark:text-red-300">
                 Using local data. Check console for details.
               </p>
             </div>
             <button
               onClick={() => refetch()}
-              className="rounded-lg border border-red-300 bg-white px-3 py-1 text-sm font-medium text-red-700 hover:bg-red-50 transition"
+              className="rounded-lg border border-red-300 bg-white px-3 py-1 text-sm font-medium text-red-700 transition hover:bg-red-50 dark:border-red-800 dark:bg-stone-900 dark:text-red-300 dark:hover:bg-red-950/50"
             >
               Retry
             </button>
@@ -217,12 +219,12 @@ export function DashboardPage({
 
       <section className="space-y-3">
         {normalizeSearchQuery(searchQuery) ? (
-          <p className="text-sm font-medium text-stone-600">
+          <p className="text-sm font-medium text-stone-600 dark:text-stone-400">
             {filteredModules.length} of {modules.length} modules
           </p>
         ) : null}
         {filteredModules.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-4 py-8 text-center text-sm text-stone-600">
+          <p className="rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-4 py-8 text-center text-sm text-stone-600 dark:border-stone-600 dark:bg-stone-800/50 dark:text-stone-400">
             No modules match “{searchQuery.trim()}”. Try a shorter or different keyword.
           </p>
         ) : (

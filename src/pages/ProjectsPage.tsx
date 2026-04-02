@@ -66,40 +66,40 @@ export function ProjectsPage() {
       <div className="space-y-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-amber-800">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-amber-800 dark:text-amber-400">
               Practice catalog
             </p>
             <h1 className="mt-2 text-3xl font-black tracking-tight text-stone-950 sm:text-4xl">
               All practice projects
             </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-stone-600">
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-stone-600 dark:text-stone-400">
               Search and filter by module, level, or estimated duration. Each card
               opens the full brief on its project page.
             </p>
           </div>
-          <div className="rounded-full border border-stone-200 bg-stone-50 px-4 py-2 text-sm font-semibold text-stone-700">
+          <div className="rounded-full border border-stone-200 bg-stone-50 px-4 py-2 text-sm font-semibold text-stone-700 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-200">
             {filtered.length} / {allListed.length} shown
           </div>
         </div>
 
-        <div className="rounded-[1.75rem] border border-stone-200/80 bg-white/80 p-5 shadow-[0_16px_40px_rgba(87,57,24,0.08)]">
+        <div className="rounded-[1.75rem] border border-stone-200/80 bg-white/80 p-5 shadow-[0_16px_40px_rgba(87,57,24,0.08)] transition-colors duration-300 dark:border-stone-700/80 dark:bg-stone-900/80 dark:shadow-[0_16px_40px_rgba(0,0,0,0.35)]">
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <label className="flex flex-col gap-1 text-sm font-medium text-stone-700">
+            <label className="flex flex-col gap-1 text-sm font-medium text-stone-700 dark:text-stone-300">
               Search
               <input
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Title, topic, module…"
-                className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-stone-900 outline-none ring-amber-500/30 focus:ring-2"
+                className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-stone-900 outline-none ring-amber-500/30 transition-colors duration-300 focus:ring-2 dark:border-stone-600 dark:bg-stone-950 dark:text-stone-100 dark:ring-amber-400/25"
               />
             </label>
-            <label className="flex flex-col gap-1 text-sm font-medium text-stone-700">
+            <label className="flex flex-col gap-1 text-sm font-medium text-stone-700 dark:text-stone-300">
               Module
               <select
                 value={moduleSlug}
                 onChange={(e) => setModuleSlug(e.target.value)}
-                className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-stone-900 outline-none ring-amber-500/30 focus:ring-2"
+                className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-stone-900 outline-none ring-amber-500/30 transition-colors duration-300 focus:ring-2 dark:border-stone-600 dark:bg-stone-950 dark:text-stone-100 dark:ring-amber-400/25"
               >
                 <option value="any">All modules</option>
                 {moduleOptions.map((m) => (
@@ -109,14 +109,14 @@ export function ProjectsPage() {
                 ))}
               </select>
             </label>
-            <label className="flex flex-col gap-1 text-sm font-medium text-stone-700">
+            <label className="flex flex-col gap-1 text-sm font-medium text-stone-700 dark:text-stone-300">
               Level
               <select
                 value={level}
                 onChange={(e) =>
                   setLevel(e.target.value as (typeof LEVELS)[number])
                 }
-                className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-stone-900 outline-none ring-amber-500/30 focus:ring-2"
+                className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-stone-900 outline-none ring-amber-500/30 transition-colors duration-300 focus:ring-2 dark:border-stone-600 dark:bg-stone-950 dark:text-stone-100 dark:ring-amber-400/25"
               >
                 {LEVELS.map((l) => (
                   <option key={l} value={l}>
@@ -125,14 +125,14 @@ export function ProjectsPage() {
                 ))}
               </select>
             </label>
-            <label className="flex flex-col gap-1 text-sm font-medium text-stone-700">
+            <label className="flex flex-col gap-1 text-sm font-medium text-stone-700 dark:text-stone-300">
               Duration
               <select
                 value={durationBucket}
                 onChange={(e) =>
                   setDurationBucket(e.target.value as DurationBucketId)
                 }
-                className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-stone-900 outline-none ring-amber-500/30 focus:ring-2"
+                className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-stone-900 outline-none ring-amber-500/30 transition-colors duration-300 focus:ring-2 dark:border-stone-600 dark:bg-stone-950 dark:text-stone-100 dark:ring-amber-400/25"
               >
                 {DURATION_OPTIONS.map((d) => (
                   <option key={d.id} value={d.id}>
@@ -145,11 +145,11 @@ export function ProjectsPage() {
         </div>
 
         {filtered.length === 0 ? (
-          <p className="rounded-2xl border border-stone-200 bg-stone-50 px-6 py-8 text-center text-sm text-stone-600">
+          <p className="rounded-2xl border border-stone-200 bg-stone-50 px-6 py-8 text-center text-sm text-stone-600 dark:border-stone-600 dark:bg-stone-800/50 dark:text-stone-400">
             No projects match these filters.{' '}
             <button
               type="button"
-              className="font-semibold text-amber-800 underline decoration-amber-400/60 hover:decoration-amber-600"
+              className="font-semibold text-amber-800 underline decoration-amber-400/60 hover:decoration-amber-600 dark:text-amber-400 dark:decoration-amber-600/60"
               onClick={() => {
                 setQuery('')
                 setModuleSlug('any')
@@ -185,11 +185,11 @@ export function ProjectsPage() {
           </div>
         )}
 
-        <p className="text-center text-sm text-stone-500">
+        <p className="text-center text-sm text-stone-500 dark:text-stone-400">
           Prefer the roadmap?{' '}
           <Link
             to="/"
-            className="font-semibold text-amber-800 underline decoration-amber-400/60 hover:decoration-amber-600"
+            className="font-semibold text-amber-800 underline decoration-amber-400/60 hover:decoration-amber-600 dark:text-amber-400"
           >
             Back to dashboard
           </Link>

@@ -8,6 +8,7 @@ import { ModulePracticeProjectsSection } from '../features/practice-projects/Mod
 import { ModuleProjectSubmissionsOverview } from '../features/practice-projects/ModuleProjectSubmissionsOverview'
 import { Shell } from '../layout/Shell'
 import { getPracticeProjectsForModule } from '../data/practiceProjectLookup'
+import { CHROME_BADGE_MUTED, CHROME_LINK_PILL } from '../lib/chromeClasses'
 import { getModuleBySlugFromList, getModuleProgress } from '../lib/moduleUtils'
 
 function ModuleDetailsMainContent({
@@ -29,17 +30,17 @@ function ModuleDetailsMainContent({
 
   return (
     <>
-      <section className="overflow-hidden rounded-4xl border border-stone-200/70 bg-white/80 shadow-[0_20px_80px_rgba(87,57,24,0.10)] backdrop-blur">
+      <section className="overflow-hidden rounded-4xl border border-stone-200/70 bg-white/80 shadow-[0_20px_80px_rgba(87,57,24,0.10)] backdrop-blur transition-colors duration-300 dark:border-stone-700/70 dark:bg-stone-900/80 dark:shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
         <div className="grid gap-8 px-6 py-8 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-10">
           <div className="space-y-5">
-            <div className="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-amber-900">
+            <div className="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-amber-900 dark:bg-amber-950/50 dark:text-amber-200">
               {module.title}
             </div>
             <div>
-              <h1 className="text-4xl font-black tracking-tight text-stone-950 sm:text-5xl">
+              <h1 className="text-4xl font-black tracking-tight text-stone-950 sm:text-5xl dark:text-stone-50">
                 {module.subtitle}
               </h1>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-600 sm:text-base dark:text-stone-400">
                 {module.summary}
               </p>
             </div>
@@ -51,13 +52,13 @@ function ModuleDetailsMainContent({
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm font-medium text-stone-600">
+              <div className="flex items-center justify-between text-sm font-medium text-stone-600 dark:text-stone-400">
                 <span>Module coverage</span>
                 <span>
                   {stats.completed} / {stats.total}
                 </span>
               </div>
-              <div className="h-3 overflow-hidden rounded-full bg-stone-200">
+              <div className="h-3 overflow-hidden rounded-full bg-stone-200 dark:bg-stone-700">
                 <div
                   className="h-full rounded-full bg-linear-to-r from-amber-500 to-stone-900"
                   style={{ width: `${stats.percent}%` }}
@@ -104,18 +105,22 @@ function ModuleDetailsMainContent({
       {stats.percent === 100 ? (
         <ModuleProjectSubmissionsOverview moduleSlug={module.slug} />
       ) : (
-        <section className="rounded-2xl border border-amber-200/80 bg-amber-50/70 p-6 shadow-[0_16px_40px_rgba(235,210,163,0.35)]">
-          <h2 className="text-lg font-bold text-amber-950">Finish topic tracker first</h2>
-          <p className="mt-2 text-sm text-amber-800">
+        <section className="rounded-2xl border border-amber-200/80 bg-amber-50/70 p-6 shadow-[0_16px_40px_rgba(235,210,163,0.35)] transition-colors duration-300 dark:border-amber-900/50 dark:bg-amber-950/30 dark:shadow-none">
+          <h2 className="text-lg font-bold text-amber-950 dark:text-amber-100">
+            Finish topic tracker first
+          </h2>
+          <p className="mt-2 text-sm text-amber-800 dark:text-amber-200">
             Project submission is enabled only after you complete all module topics.
             ({stats.completed}/{stats.total} topics done)
           </p>
         </section>
       )}
 
-      <section className="rounded-[1.75rem] border border-stone-200/80 bg-white/80 p-6 shadow-[0_16px_40px_rgba(87,57,24,0.08)]">
-        <h2 className="text-lg font-bold text-stone-950">Practice questions</h2>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
+      <section className="rounded-[1.75rem] border border-stone-200/80 bg-white/80 p-6 shadow-[0_16px_40px_rgba(87,57,24,0.08)] transition-colors duration-300 dark:border-stone-700/80 dark:bg-stone-900/80 dark:shadow-[0_16px_40px_rgba(0,0,0,0.35)]">
+        <h2 className="text-lg font-bold text-stone-950 dark:text-stone-50">
+          Practice questions
+        </h2>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600 dark:text-stone-400">
           Optional self-check: multiple choice, not graded. Reveal answers to compare with your
           understanding.
         </p>
@@ -129,7 +134,7 @@ function ModuleDetailsMainContent({
             </Link>
           </div>
         ) : (
-          <p className="mt-5 rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-4 py-3 text-sm text-stone-600">
+          <p className="mt-5 rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-4 py-3 text-sm text-stone-600 dark:border-stone-600 dark:bg-stone-800/50 dark:text-stone-400">
             Practice questions coming soon for this module.
           </p>
         )}
@@ -165,13 +170,10 @@ export function ModuleDetailsPage({
   return (
     <Shell searchQuery={searchQuery} onSearch={onSearch} modules={modules}>
       <div className="flex items-center justify-between gap-4">
-        <Link
-          to="/"
-          className="inline-flex items-center rounded-full border border-stone-300 bg-white/80 px-4 py-2 text-sm font-semibold text-stone-700 transition hover:border-amber-400 hover:text-amber-700"
-        >
+        <Link to="/" className={CHROME_LINK_PILL}>
           Back to roadmap
         </Link>
-        <div className="rounded-full border border-stone-300 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-stone-500">
+        <div className={CHROME_BADGE_MUTED}>
           Module {module.id}
         </div>
       </div>

@@ -53,39 +53,41 @@ export function TopicsTable({
   const shownCount = visibleTopics.length
 
   return (
-    <section className="rounded-[1.75rem] border border-stone-200/80 bg-white/80 p-6 shadow-[0_16px_40px_rgba(87,57,24,0.08)]">
+    <section className="rounded-[1.75rem] border border-stone-200/80 bg-white/80 p-6 shadow-[0_16px_40px_rgba(87,57,24,0.08)] transition-colors duration-300 dark:border-stone-700/80 dark:bg-stone-900/80 dark:shadow-[0_16px_40px_rgba(0,0,0,0.35)]">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-stone-950">Topic Tracker</h2>
-          <p className="mt-2 text-sm leading-6 text-stone-600">
+          <h2 className="text-2xl font-bold text-stone-950 dark:text-stone-50">
+            Topic Tracker
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-stone-600 dark:text-stone-400">
             Review every topic in a structured list and toggle completion as you
             make progress.
           </p>
         </div>
-        <div className="rounded-full border border-stone-200 bg-stone-50 px-4 py-2 text-sm font-medium text-stone-600">
+        <div className="rounded-full border border-stone-200 bg-stone-50 px-4 py-2 text-sm font-medium text-stone-600 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-300">
           {q
             ? `${shownCount} of ${totalTopics} topics`
             : `${totalTopics} total topics`}
         </div>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-3xl border border-stone-200">
+      <div className="mt-6 overflow-hidden rounded-3xl border border-stone-200 dark:border-stone-600">
         <div className="overflow-x-auto">
           <table className="min-w-full border-collapse">
-            <thead className="bg-stone-100/90 text-left">
-              <tr className="text-xs uppercase tracking-[0.18em] text-stone-500">
+            <thead className="bg-stone-100/90 text-left dark:bg-stone-800/90">
+              <tr className="text-xs uppercase tracking-[0.18em] text-stone-500 dark:text-stone-400">
                 <th className="px-4 py-4 font-semibold">#</th>
                 <th className="px-4 py-4 font-semibold">Topic</th>
                 <th className="px-4 py-4 font-semibold">Status</th>
                 <th className="px-4 py-4 font-semibold text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="bg-white">
+            <tbody className="bg-white dark:bg-stone-900">
               {visibleTopics.length === 0 ? (
                 <tr>
                   <td
                     colSpan={4}
-                    className="px-4 py-10 text-center text-sm text-stone-600"
+                    className="px-4 py-10 text-center text-sm text-stone-600 dark:text-stone-400"
                   >
                     No topics match your search. Clear the filter to see all topics.
                   </td>
@@ -105,9 +107,9 @@ export function TopicsTable({
                 <tr
                   key={topic.label}
                   id={topicRowId(topic.label)}
-                  className="scroll-mt-24 border-t border-stone-200 text-sm text-stone-700"
+                  className="scroll-mt-24 border-t border-stone-200 text-sm text-stone-700 dark:border-stone-600 dark:text-stone-300"
                 >
-                  <td className="px-4 py-4 align-middle font-semibold text-stone-400">
+                  <td className="px-4 py-4 align-middle font-semibold text-stone-400 dark:text-stone-500">
                     {String(index + 1).padStart(2, '0')}
                   </td>
                   <td className="px-4 py-4 align-middle">
@@ -117,7 +119,7 @@ export function TopicsTable({
                         <summary className="topic-heading topic-heading-why">
                           Why this matters
                         </summary>
-                        <p className="mt-2 text-xs leading-5 text-stone-600">
+                        <p className="mt-2 text-xs leading-5 text-stone-600 dark:text-stone-400">
                           {topicWhy}
                         </p>
                       </details>
@@ -127,10 +129,10 @@ export function TopicsTable({
                         <summary className="topic-heading topic-heading-key">
                           Key ideas
                         </summary>
-                        <ul className="mt-2 list-inside list-disc space-y-1 text-xs leading-5 text-stone-600">
+                        <ul className="mt-2 list-inside list-disc space-y-1 text-xs leading-5 text-stone-600 dark:text-stone-400">
                           {topicKeyPoints.map((kp) => (
                             <li key={kp.name}>
-                              <span className="font-medium text-stone-800">
+                              <span className="font-medium text-stone-800 dark:text-stone-200">
                                 {kp.name}
                               </span>
                               {': '}
@@ -141,13 +143,15 @@ export function TopicsTable({
                       </details>
                     ) : null}
                     {topicProjects.length > 0 ? (
-                      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-stone-600">
-                        <span className="font-semibold text-stone-500">Try:</span>
+                      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-stone-600 dark:text-stone-400">
+                        <span className="font-semibold text-stone-500 dark:text-stone-500">
+                          Try:
+                        </span>
                         {topicProjects.map((p) => (
                           <Link
                             key={p.slug}
                             to={`/modules/${module.slug}/projects/${p.slug}`}
-                            className="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 font-medium text-amber-800 transition hover:border-amber-400 hover:bg-amber-50"
+                            className="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 font-medium text-amber-800 transition hover:border-amber-400 hover:bg-amber-50 dark:border-stone-600 dark:bg-stone-800 dark:text-amber-400 dark:hover:border-amber-500 dark:hover:bg-amber-950/40"
                           >
                             {p.title}
                           </Link>
@@ -160,8 +164,8 @@ export function TopicsTable({
                       className={[
                         'inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.16em]',
                         topic.done
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : 'bg-amber-100 text-amber-800',
+                          ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200'
+                          : 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200',
                       ].join(' ')}
                     >
                       {topic.done ? 'Completed' : 'Pending'}
@@ -177,8 +181,8 @@ export function TopicsTable({
                       className={[
                         'inline-flex min-w-36 items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition',
                         topic.done
-                          ? 'bg-stone-950 text-white hover:bg-stone-800'
-                          : 'bg-amber-500 text-stone-950 hover:bg-amber-400',
+                          ? 'bg-stone-950 text-white hover:bg-stone-800 dark:bg-stone-100 dark:text-stone-950 dark:hover:bg-white'
+                          : 'bg-amber-500 text-stone-950 hover:bg-amber-400 dark:bg-amber-600 dark:text-stone-950 dark:hover:bg-amber-500',
                       ].join(' ')}
                     >
                       {topic.done ? 'Mark Incomplete' : 'Mark Complete'}

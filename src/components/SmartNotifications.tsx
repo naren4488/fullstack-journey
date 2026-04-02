@@ -70,42 +70,42 @@ function NotificationCard({ notification, onDismiss }: {
   const getCardStyles = (type: string) => {
     switch (type) {
       case 'study':
-        return 'border-amber-200 bg-amber-50';
+        return 'border-amber-200 bg-amber-50 dark:border-amber-900/50 dark:bg-amber-950/35';
       case 'inactive':
       case 'pending':
-        return 'border-amber-200 bg-amber-50';
+        return 'border-amber-200 bg-amber-50 dark:border-amber-900/50 dark:bg-amber-950/35';
       case 'celebration':
       case 'progress':
-        return 'border-green-200 bg-green-50';
+        return 'border-green-200 bg-green-50 dark:border-emerald-900/50 dark:bg-emerald-950/35';
       default:
-        return 'border-stone-200 bg-stone-50';
+        return 'border-stone-200 bg-stone-50 dark:border-stone-600 dark:bg-stone-800/60';
     }
   };
 
   const getActionColor = (type: string) => {
     switch (type) {
       case 'study':
-        return 'text-amber-700 hover:text-amber-800';
+        return 'text-amber-700 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300';
       case 'inactive':
       case 'pending':
-        return 'text-amber-700 hover:text-amber-800';
+        return 'text-amber-700 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300';
       case 'celebration':
       case 'progress':
-        return 'text-green-700 hover:text-green-800';
+        return 'text-green-700 hover:text-green-800 dark:text-emerald-400 dark:hover:text-emerald-300';
       default:
-        return 'text-stone-700 hover:text-stone-800';
+        return 'text-stone-700 hover:text-stone-800 dark:text-stone-300 dark:hover:text-stone-200';
     }
   };
 
   return (
-    <div className={`rounded-xl border p-4 shadow-sm ${getCardStyles(notification.type)}`}>
+    <div className={`rounded-xl border p-4 shadow-sm transition-colors duration-300 ${getCardStyles(notification.type)}`}>
       <div className="flex items-start gap-3">
         <div className={`rounded-full p-2 ${getCardStyles(notification.type)}`}>
           <NotificationIcon type={notification.icon} />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold text-stone-900">{notification.title}</h3>
-          <p className="text-sm text-stone-700 mt-1">{notification.message}</p>
+          <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100">{notification.title}</h3>
+          <p className="mt-1 text-sm text-stone-700 dark:text-stone-300">{notification.message}</p>
           {notification.actionText && notification.actionLink && (
             <Link
               to={notification.actionLink}
@@ -118,7 +118,7 @@ function NotificationCard({ notification, onDismiss }: {
         {onDismiss && notification.type !== 'study' && (
           <button
             onClick={() => onDismiss(notification.id)}
-            className="text-stone-400 hover:text-stone-600 p-1"
+            className="p-1 text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300"
             aria-label="Dismiss notification"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-2">

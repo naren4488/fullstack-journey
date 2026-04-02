@@ -31,17 +31,17 @@ export function ModulePracticeProjectsSection({
 
   return (
     <section
-      className={`rounded-[1.75rem] border bg-white/80 p-6 shadow-[0_16px_40px_rgba(87,57,24,0.08)] ${ui.sectionBorderClass}`}
+      className={`rounded-[1.75rem] border bg-white/80 p-6 shadow-[0_16px_40px_rgba(87,57,24,0.08)] transition-colors duration-300 dark:bg-stone-900/80 dark:shadow-[0_16px_40px_rgba(0,0,0,0.35)] ${ui.sectionBorderClass}`}
     >
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p className={`text-xs font-bold uppercase tracking-[0.24em] ${ui.sectionHeadingClass}`}>
             Practice Projects
           </p>
-          <h2 className="mt-2 text-2xl font-bold text-stone-950">
+          <h2 className="mt-2 text-2xl font-bold text-stone-950 dark:text-stone-50">
             Apply {moduleTitle} in guided mini projects
           </h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-stone-600">
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-stone-600 dark:text-stone-400">
             Each card opens a full brief. On the project page, use{' '}
             <strong>View code</strong> for sample snippets and explanations—then build your own version
             locally.
@@ -57,7 +57,7 @@ export function ModulePracticeProjectsSection({
       </div>
 
       {projects.length === 0 ? (
-        <p className="mt-6 rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-4 py-6 text-center text-sm text-stone-600">
+        <p className="mt-6 rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-4 py-6 text-center text-sm text-stone-600 dark:border-stone-600 dark:bg-stone-800/50 dark:text-stone-400">
           No practice projects match your search. Clear the filter to see all projects.
         </p>
       ) : (
